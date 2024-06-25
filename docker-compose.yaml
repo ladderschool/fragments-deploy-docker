@@ -1,0 +1,44 @@
+version: "3.8"
+
+# You can remove networks if different deploy environment
+networks:
+  coolify:
+    name: coolify
+    external: true
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: api_serve
+    ports:
+      - "8911:8911"
+    environment:
+      - NODE_ENV=production
+      - YARN_VERSION=4.3.0
+    healthcheck:
+      test: curl -f http://localhost:8911/graphql/health || exit 1
+      interval: 10s
+      start_period: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - coolify
+
+  web:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: web_serve
+    ports:
+      - "8910:8910"
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      - NODE_ENV=production
+      - API_PROXY_TARGET=http://localhost:8911
+      - YARN_VERSION=4.3.0
+    networks:
+      - coolify
