@@ -22,6 +22,7 @@
 
 [graphql]
   fragments = true
+  trustedDocuments = true
 
 [experimental.dockerfile]
 	enabled = true

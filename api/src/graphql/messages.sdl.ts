@@ -8,12 +8,12 @@ export const schema = gql`
   }
 
   type Query {
-    messages: [Message!]! @requireAuth
-    message(id: Int!): Message @requireAuth
+    messages: [Message!]! @skipAuth
+    message(id: Int!): Message @skipAuth
   }
 
   input CreateMessageInput {
-    viewed: Boolean!
+    viewed: Boolean
     content: String!
   }
 
@@ -23,8 +23,9 @@ export const schema = gql`
   }
 
   type Mutation {
-    createMessage(input: CreateMessageInput!): Message! @requireAuth
-    updateMessage(id: Int!, input: UpdateMessageInput!): Message! @requireAuth
-    deleteMessage(id: Int!): Message! @requireAuth
+    createMessage(chatroomId: Int!, input: CreateMessageInput!): Message!
+      @skipAuth
+    updateMessage(id: Int!, input: UpdateMessageInput!): Message! @skipAuth
+    deleteMessage(id: Int!): Message! @skipAuth
   }
 `

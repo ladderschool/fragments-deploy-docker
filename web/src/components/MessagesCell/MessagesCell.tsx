@@ -6,6 +6,8 @@ import type {
   TypedDocumentNode,
 } from '@redwoodjs/web'
 
+import Messages from 'src/components/Messages/Messages'
+import MessageProvider from 'src/context/MessageContext'
 export const QUERY: TypedDocumentNode<
   MessagesQuery,
   MessagesQueryVariables
@@ -27,10 +29,8 @@ export const Failure = ({ error }: CellFailureProps) => (
 
 export const Success = ({ messages }: CellSuccessProps<MessagesQuery>) => {
   return (
-    <ul>
-      {messages.map((item) => {
-        return <li key={item.id}>{JSON.stringify(item)}</li>
-      })}
-    </ul>
+    <MessageProvider>
+      <Messages messages={messages} />
+    </MessageProvider>
   )
 }
